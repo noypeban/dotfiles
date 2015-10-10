@@ -26,6 +26,82 @@
 (set-language-environment 'Japanese)
 (prefer-coding-system 'utf-8)
 #+END_SRC
+* Org
+** Setting Up
+#+name: org-mode-setting
+#+BEGIN_SRC emacs-lisp
+(require 'org-install)
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+(setq org-directory "/home/org/org/")
+(setq org-default-notes-file (concat org-directory "/todo.org"))
+#+END_SRC
+** TODO-Items
+*** Enforce dependencies
+Require child tasks and checkboxes to be done before a parent task can
+be marked done.
+#+BEGIN_SRC emacs-lisp
+  (setq
+   org-enforce-todo-dependencies t
+   org-enforce-todo-checkbox-dependencies t)
+#+END_SRC
+
+*** Keep logs in their own drawer
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (setq org-log-into-drawer t)
+#+END_SRC
+
+*** Log completion
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (setq org-log-done 'time)
+#+END_SRC
+
+*** Habits
+Shift the consistency graph over a bit to make room for task
+names.
+#+name: packages
+#+BEGIN_SRC emacs-lisp
+  (setq org-habit-graph-column 70)
+  (setq org-habit-show-habits-only-for-today nil)
+#+END_SRC
+** Tag
+*** Sequence tags
+#+name: org-mode-setting
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-keywords
+  '("TODO" "STARTED" "WAITING" "APPT" "VERIFY" "DONE" "CANCELLED" "DEFERRED")
+  org-todo-interpretation 'sequence)
+#+END_SRC
+** TimeStamp
+*** DONE になった時、タイムスタンプを付加する
+#+name: org-mode-setting
+#+BEGIN_SRC emacs-lisp
+(setq org-use-fast-todo-selection t)
+#+END_SRC
+** Properties
+** Columnsp
+** Capture
+** Agenda:
+#+name: org-mode-setting
+#+BEGIN_SRC emacs-lisp
+(setq org-agenda-files (list org-default-notes-file))
+#+END_SRC
+*** 登録されてない日は `org-timeline' で表示しない
+#+name: org-mode-setting
+#+BEGIN_SRC emacs-lisp
+(setq org-timeline-show-empty-dates nil)
+#+END_SRC
+** MobileOrg
+#+name: org-mode-setting
+#+BEGIN_SRC emacs-lisp
+(setq org-mobile-directory "/home/org/MobileOrg/")
+(setq org-mobile-inbox-for-pull org-default-notes-file)
+;(setq org-mobile-inbox-for-pull (concat org-directory "/inbox.org"))
+#+END_SRC
 * UI
 ** Theme
 #+name: look-and-feel
@@ -443,33 +519,6 @@ A modern list api for Emacs. No 'cl required.
     (mapcar (lambda (m) (add-to-list 'org-modules m))
             modules))
   (org-load-modules-maybe t)
-#+END_SRC
-**** Tasks
-***** Enforce dependencies
-Require child tasks and checkboxes to be done before a parent task can
-be marked done.
-#+BEGIN_SRC emacs-lisp
-  (setq
-   org-enforce-todo-dependencies t
-   org-enforce-todo-checkbox-dependencies t)
-#+END_SRC
-***** Keep logs in their own drawer
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (setq org-log-into-drawer t)
-#+END_SRC
-***** Log completion
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (setq org-log-done 'time)
-#+END_SRC
-***** Habits
-Shift the consistency graph over a bit to make room for task
-names.
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (setq org-habit-graph-column 70)
-  (setq org-habit-show-habits-only-for-today nil)
 #+END_SRC
 **** Refiling
 #+BEGIN_SRC emacs-lisp
@@ -937,11 +986,6 @@ adding it here, and also for any personal / sensitive configuration.
 ;; 行ハイライト
 (when window-system (global-hl-line-mode +1))
 
-;;org-mode
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-cb" 'org-iswitchb)
 #+END_SRC
 * Configuration file layout
 
@@ -956,6 +1000,7 @@ this org file.
 
   <<startup>>
   <<localization>>
+  <<org-mode-setting>>
   <<look-and-feel>>
   <<packages>>
   <<programming>>
