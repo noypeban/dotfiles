@@ -24,6 +24,44 @@
 (unless (server-running-p)
 (server-start))
 #+END_SRC
+** バッファの同一ファイル名を区別する
+#+name: startup
+#+BEGIN_SRC emacs-lisp
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+#+END_SRC
+
+** ウィンドウの上部に現在の関数名を表示
+#+name: startup
+#+BEGIN_SRC emacs-lisp
+(which-function-mode 1)
+#+END_SRC
+
+** フォントロック
+#+name: startup
+#+BEGIN_SRC emacs-lisp
+(global-font-lock-mode +1)
+(setq font-lock-support-mode
+            (if (fboundp 'jit-lock-mode) 'jit-lock-mode 'lazy-lock-mode))
+#+END_SRC
+** 一般的な設定ファイルなどの構文強調表示
+#+name: startup
+#+BEGIN_SRC emacs-lisp
+;; http://at-aka.blogspot.jp/2011/03/emacs-etchosts-etcapache2conf.html
+(require 'generic-x)
+#+END_SRC
+** 対応するカッコを強調表示
+#+name: startup
+#+BEGIN_SRC emacs-lisp
+(show-paren-mode t)
+(setq show-paren-style 'mixed) ; `parenthesis' or `expression' or `mixed'
+#+END_SRC
+** 行ハイライト
+#+name: startup
+#+BEGIN_SRC emacs-lisp
+(when window-system (global-hl-line-mode +1))
+#+END_SRC
+
 * UI
 ** Theme
 #+name: look-and-feel
@@ -206,16 +244,12 @@ names.
   (setq org-habit-graph-column 70)
   (setq org-habit-show-habits-only-for-today nil)
 #+END_SRC
-** Tag
 ** TimeStamp
-*** DONE になった時、タイムスタンプを付加する
+*** DONEになった時、タイムスタンプを付加する
 #+name: org-mode-setting
 #+BEGIN_SRC emacs-lisp
 (setq org-use-fast-todo-selection t)
 #+END_SRC
-** Properties
-** Columns
-** Capture
 ** Agenda:
 #+name: org-mode-setting
 #+BEGIN_SRC emacs-lisp
@@ -226,8 +260,6 @@ names.
 #+BEGIN_SRC emacs-lisp
 (setq org-timeline-show-empty-dates nil)
 #+END_SRC
-** Logging
-*** 
 ** MobileOrg
 #+name: org-mode-setting
 #+BEGIN_SRC emacs-lisp
@@ -949,37 +981,6 @@ adding it here, and also for any personal / sensitive configuration.
                 (directory-files (expand-file-name path) t file-pattern)))))
 
   (my/load-elisp-directory "~/.emacs.local.d")
-#+END_SRC
-* 取り込みたい設定
-#+name: tmp-no-load
-#+BEGIN_SRC emacs-lisp
-;;; ~/.emacs.d/
-(unless (boundp 'user-emacs-directory)
-    (defvar user-emacs-directory (expand-file-name "~/.emacs.d/")))
-
-;; バッファの同一ファイル名を区別する
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-
-;;ウィンドウの上部に現在の関数名を表示
-(which-function-mode 1)
-
-;; フォントロック
-(global-font-lock-mode +1)
-(setq font-lock-support-mode
-            (if (fboundp 'jit-lock-mode) 'jit-lock-mode 'lazy-lock-mode))
-
-;; 一般的な設定ファイルなどの構文強調表示
-;; http://at-aka.blogspot.jp/2011/03/emacs-etchosts-etcapache2conf.html
-(require 'generic-x)
-
-;; 対応するカッコを強調表示
-(show-paren-mode t)
-(setq show-paren-style 'mixed) ; `parenthesis' or `expression' or `mixed'
-
-;; 行ハイライト
-(when window-system (global-hl-line-mode +1))
-
 #+END_SRC
 * Configuration file layout
 
