@@ -343,43 +343,6 @@ Communicates with the clojure REPL.
     :ensure t
     :mode "\\.hy$")
 #+END_SRC
-*** Erlang
-A distributed, fault-tolerant functional language.
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-    (use-package erlang
-      :ensure t
-      :mode ("\.[eh]rl$" . erlang-mode)
-      :config (add-hook 'erlang-mode-hook
-                        (lambda ()
-                          (setq inferior-erlang-machine-options '("-sname" "emacs"
-                                                                  "-hidden")))))
-#+END_SRC
-*** Haskell
-A strongly typed, pure functional language.
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package haskell-mode
-    :ensure t
-    :mode "\.hs$")
-#+END_SRC
-*** PHP
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package web-mode
-    :ensure t
-    :mode "\\.html?$")
-
-  (use-package php-mode
-    :ensure t
-    :mode (("\\.php$" . php-mode)
-           ("\\.inc$" . php-mode))
-    :config (add-hook 'php-mode-hook (lambda ()
-                                       "Customize PHP indentation"
-                                       (c-set-offset 'arglist-cont-nonempty 'c-lineup-arglist)
-                                       (c-set-offset 'substatement-open 0)
-                                       (c-set-offset 'case-label '+))))
-#+END_SRC
 *** Python
 #+name: programming
 #+BEGIN_SRC emacs-lisp
@@ -443,19 +406,6 @@ Configure jedi and company-mode to provide auto-completion for python.
   (use-package dockerfile-mode
     :ensure t
     :mode "^Dockerfile$")
-#+END_SRC
-*** Graphviz
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package graphviz-dot-mode
-    :ensure t
-    :mode "\.dot$")
-#+END_SRC
-*** Gnuplot
-#+name: programming
-#+BEGIN_SRC emacs-lisp
-  (use-package gnuplot
-    :ensure t)
 #+END_SRC
 ** Tools
 *** Autocomplete
@@ -692,68 +642,6 @@ breaks.
                    org-mode-hook)))
 
 #+END_SRC
-* Mail
-** BBDB
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package bbdb
-    :ensure t
-    :init (progn (require 'bbdb)
-                 (bbdb-initialize 'gnus 'message)
-                 (bbdb-mua-auto-update-init 'gnus 'message)
-                 (setq bbdb-message-all-addresses t)
-                 (add-hook 'gnus-summary-mode-hook
-                           (lambda ()
-                             (define-key gnus-summary-mode-map
-                               (kbd ";") 'bbdb-mua-edit-field)))))
-#+END_SRC
-** Gnus
-#+name: packages
-#+BEGIN_SRC emacs-lisp
-  (use-package gnus
-    :commands gnus
-    :init (progn (defun my/configure-gnus ()
-                     <<gnus>>
-                     )
-                   (setq gnus-before-startup-hook 'my/configure-gnus)))
-#+END_SRC
-*** Avoid rich-text messages
-#+name: gnus
-#+BEGIN_SRC emacs-lisp
-  (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
-#+END_SRC
-*** Summary view formatting
-Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a673a74356e7141f
-
-#+name: gnus
-#+BEGIN_SRC emacs-lisp
-  (when window-system
-    (setq gnus-sum-thread-tree-indent "  ")
-    (setq gnus-sum-thread-tree-root "") ;; "● ")
-    (setq gnus-sum-thread-tree-false-root "") ;; "◯ ")
-    (setq gnus-sum-thread-tree-single-indent "") ;; "◎ ")
-    (setq gnus-sum-thread-tree-vertical        "│")
-    (setq gnus-sum-thread-tree-leaf-with-other "├─► ")
-    (setq gnus-sum-thread-tree-single-leaf     "╰─► "))
-  (setq gnus-summary-line-format
-        (concat
-         "%0{%U%R%z%}"
-         "%3{│%}" "%1{%d%}" "%3{│%}" ;; date
-         "  "
-         "%4{%-20,20f%}"               ;; name
-         "  "
-         "%3{│%}"
-         " "
-         "%1{%B%}"
-         "%s\n"))
-  (setq gnus-summary-display-arrow t)
-#+END_SRC
-*** Inline images
-#+name: gnus
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'mm-attachment-override-types "image/.*")
-  (setq mm-inline-large-images t)
-#+END_SRC
 * Publishing
 ** Htmlize
 #+name: packages
@@ -785,11 +673,6 @@ Taken from http://groups.google.com/group/gnu.emacs.gnus/browse_thread/thread/a6
                    (global-git-gutter-mode t)))))
 #+END_SRC
 * Other functionality
-** Disable tab indenting by default
-#+name: other
-#+BEGIN_SRC emacs-lisp
-  (setq-default indent-tabs-mode nil)
-#+END_SRC
 ** Rename file and buffer
 Taken from [[http://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/][Emacs Redux]]
 #+name: other
