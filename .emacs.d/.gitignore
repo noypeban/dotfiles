@@ -6,16 +6,20 @@ emacs.el
 custom.el
 
 # Data
-auto-save-list
-session.*
-ac-comphist.dat
-eshell
-projectile-bookmarks.eld
-url
 .org-id-locations
 abbrev_defs
+ac-comphist.dat
+auto-save-list
 backups
 bookmarks
+elpa
+eshell
+kkcrc
+projectile-bookmarks.eld
+recentf
 savehist
+server
+session.*
 tramp
+url
 var
