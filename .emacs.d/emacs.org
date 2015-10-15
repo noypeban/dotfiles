@@ -21,15 +21,16 @@
 ** emacsclient
 #+name: startup
 #+BEGIN_SRC emacs-lisp
-(require 'server)
-(unless (server-running-p)
-(server-start))
+  (use-package server
+    :if window-system
+    :config (unless (server-running-p)
+              (server-start)))
 #+END_SRC
 ** バッファの同一ファイル名を区別する
 #+name: startup
 #+BEGIN_SRC emacs-lisp
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+  (use-package uniquify
+    :config (setq uniquify-buffer-name-style 'post-forward-angle-brackets))
 #+END_SRC
 
 ** ウィンドウの上部に現在の関数名を表示
@@ -72,11 +73,36 @@
 #+BEGIN_SRC emacs-lisp
   (when window-system (set-frame-parameter nil 'alpha 95))
 #+END_SRC
+** デフォルトディレクトリ
+#+name: startup
+#+BEGIN_SRC emacs-lisp
+  (setq default-directory "~/") 
+  (setq command-line-default-directory "~/")
+#+END_SRC
+* Bindings
+** comfirm exit
+#+name: startup
+#+BEGIN_SRC emacs-lisp
+  (bind-key
+   "C-x C-c"
+   (lambda ()
+     (interactive)
+     (if (y-or-n-p "Quit Emacs? ")
+         (save-buffers-kill-emacs))))
+#+END_SRC
 * UI
 ** Theme
 #+name: look-and-feel
 #+BEGIN_SRC emacs-lisp
   (load-theme 'misterioso)
+#+END_SRC
+** powerline
+#+name: startup
+#+BEGIN_SRC emacs-lisp
+  (use-package powerline
+    :ensure t
+    :init  (when window-system
+             (powerline-default-theme)))
 #+END_SRC
 ** Helm
 #+name: packages
@@ -199,7 +225,7 @@ Helm projectile integration
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
 (setq org-directory "/home/org/org/")
-(setq org-default-notes-file (concat org-directory "/todo.org"))
+(setq org-default-notes-file (concat org-directory "todo.org"))
 #+END_SRC
 ** TODO-Items
 *** Sequence tags
@@ -666,20 +692,9 @@ breaks.
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter
     :ensure t
-    :diminish git-gutter-mode
+    :config (global-git-gutter-mode t)
     :bind (("C-x g n" . git-gutter:next-hunk)
-           ("C-x g p" . git-gutter:previous-hunk))
-    :config
-    (progn
-      (global-git-gutter-mode t)
-      (defadvice ediff-make-temp-file (before make-temp-file-suspend-ll
-                                              activate compile preactivate)
-        "Disable git-gutter when running ediff"
-        (global-git-gutter-mode 0))
-      
-      (add-hook 'ediff-cleanup-hook
-                '(lambda ()
-                   (global-git-gutter-mode t)))))
+           ("C-x g p" . git-gutter:previous-hunk)))
 #+END_SRC
 * Other functionality
 ** Rename file and buffer
